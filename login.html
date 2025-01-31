@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sanrico Mercantile</title>
+    <style>
+        body {
+            background-color: #f0f8ff;
+            font-family: Arial, sans-serif;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        #login-page {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+        h1 {
+            color: #1e90ff;
+        }
+        form label {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        form input[type="email"], form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        form input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        button {
+            background-color: #1e90ff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px 0;
+        }
+        button:hover {
+            background-color: #1c86ee;
+        }
+        footer p {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div id="login-page">
+        <h1>SANRICO MERCANTILE</h1>
+        <form action="home.html" method="get">
+            <label for="email">Enter your email to log in:</label>
+            <input type="email" id="email" placeholder="email@domain.com" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="password" required>
+            <label>
+                <input type="checkbox" id="remember-me"> Remember Me
+            </label>
+            <button type="submit">LOGIN</button>
+            <button onclick="location.href='home.html'">LOGIN AS GUEST</button>
+			<div id="warning-message">User or password does not match an account in our system.</div>
+        </form>
+        <footer>
+            <p>By logging in, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+        </footer>
+    </div>
+</body>
+</html>

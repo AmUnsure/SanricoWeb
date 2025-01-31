@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Sanrico Mercantile</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: Arial, sans-serif;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        header {
+            background-color: #1e90ff;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .profile-icon {
+            background-color: white;
+            color: #1e90ff;
+            border: none;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .profile-icon:hover {
+            background-color: #e0e0e0;
+        }
+        #profile-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 15px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            text-align: left;
+        }
+        #profile-menu a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+        }
+        #profile-menu a:last-child {
+            border-bottom: none;
+        }
+        #profile-menu a:hover {
+            background-color: #f4f4f4;
+        }
+        main h2 {
+            color: #1e90ff;
+        }
+        button {
+            background-color: #1e90ff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 15px 0;
+        }
+        button:hover {
+            background-color: #1c86ee;
+        }
+    </style>
+    <script>
+        function toggleProfileMenu() {
+            const menu = document.getElementById('profile-menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>SANRICO MERCANTILE</h1>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="items.html">Tools and Supplies</a>
+            <a href="#">Support</a>
+        </nav>
+        <button class="profile-icon" onclick="toggleProfileMenu()">👤</button>
+        <div id="profile-menu">
+            <a href="profile.html">Profile</a>
+            <a href="login.html">Logout</a>
+        </div>
+    </header>
+    <main>
+       <h2>Start Your Carving Journey Today — No Experience Needed!</h2>
+        <ul>
+            <p>Wood Carving that Anyone Can Master!</p>
+            <p>Comfort, Control, and Precision in Every Cut</p>
+            <p>Perfect for Every Skill Level — Get Started with Confidence</p>
+            <p>Includes 20 Versatile Blades to Meet All Your Carving Needs</p>
+        </ul>
+        <button onclick="location.href='items.html'">Explore more deals</button>
+    </main>
+</body>
+</html>

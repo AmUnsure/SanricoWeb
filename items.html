@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Items - Sanrico Mercantile</title>
+    <style>
+        body {
+            background-color: #f0f8ff;
+            font-family: Arial, sans-serif;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        header {
+            background-color: #1e90ff;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .profile-icon {
+            background-color: white;
+            color: #1e90ff;
+            border: none;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .profile-icon:hover {
+            background-color: #e0e0e0;
+        }
+        #profile-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 15px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            text-align: left;
+        }
+        #profile-menu a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+        }
+        #profile-menu a:last-child {
+            border-bottom: none;
+        }
+        #profile-menu a:hover {
+            background-color: #f4f4f4;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        form input {
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        form button {
+            background-color: #1e90ff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+        }
+        form button:hover {
+            background-color: #1c86ee;
+        }
+    </style>
+    <script>
+        function toggleProfileMenu() {
+            const menu = document.getElementById('profile-menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>SANRICO MERCANTILE</h1>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="items.html">Tools and Supplies</a>
+            <a href="#">Support</a>
+        </nav>
+        <button class="profile-icon" onclick="toggleProfileMenu()">👤</button>
+        <div id="profile-menu">
+            <a href="profile.html">Profile</a>
+            <a href="login.html">Logout</a>
+        </div>
+    </header>
+    <main>
+        <h2>Search for Items</h2>
+        <form action="#" method="get">
+            <input type="text" id="search-bar" name="search" placeholder="Search items..." required>
+            <button type="submit">Search</button>
+        </form>
+        <h2>Results:</h2>
+        <div>
+            <!-- Placeholder for items -->
+            <div>
+                <p>Great Value LED Light Bulb, 15W (100W Equivalent) A19</p>
+                <button>Purchase</button>
+            </div>
+            <div>
+                <p>DAYBETTER A19 LED Light Bulbs, 60W Equivalent, E26</p>
+                <button>Purchase</button>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

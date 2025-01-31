@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanrico Mercantile System</title>
+    <script>
+        function navigate(page) {
+            window.location.href = page;
+        }
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #1e90ff;
+            color: white;
+            padding: 15px;
+        }
+        nav a {
+            margin: 0 10px;
+            color: white;
+            text-decoration: none;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            padding: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #1e90ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1c86ee;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Sanrico Mercantile</h1>
+        <nav>
+            <a href="#" onclick="navigate('home.html')">Home</a>
+            <a href="#" onclick="navigate('items.html')">Items</a>
+            <a href="#" onclick="navigate('login.html')">Login</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Welcome to Sanrico Mercantile</h2>
+        <p>Your one-stop shop for all your hardware needs!</p>
+        <button onclick="navigate('login.html')">Login/Register</button>
+        <button onclick="navigate('items.html')">Browse Items</button>
+    </main>
+</body>
+</html>
