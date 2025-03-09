@@ -1,0 +1,222 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Sanrico Mercantile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(
+                to bottom, 
+                rgba(60, 60, 70, 0.8) 10%,  /* Soft dark grey (top) */
+                rgba(85, 85, 105, 0.7) 30%, /* Muted purple (center) */
+                rgba(40, 40, 50, 0.9) 90%  /* Deep indigo/grey (bottom) */
+            );
+            color: #e0e0e0; /* Light grey text*/
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .profile-card {
+            background-color: rgba(30, 30, 40, 0.7);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        .input-field {
+            background-color: rgba(60, 60, 80, 0.5);
+            border: 1px solid rgba(120, 120, 150, 0.3);
+            color: #e0e0e0;
+        }
+        .input-field:focus {
+            border-color: #4f46e5;
+            outline: none;
+        }
+        .btn-primary {
+            background-color: #4f46e5;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #4338ca;
+        }
+        .btn-secondary {
+            background-color: #4b5563;
+            transition: background-color 0.3s;
+        }
+        .btn-secondary:hover {
+            background-color: #374151;
+        }
+    </style>
+</head>
+<body>
+  <header class="absolute inset-x-0 top-0 z-50">
+    <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+      <div class="flex lg:flex-1">
+        <a href="#" class="-m-1.5 p-1.5">
+          <span class="sr-only">Sanrico Mercantile</span>
+          <img class="size-8" src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=gray-300" alt="Sanrico Mercantile">
+        </a>
+      </div>
+      <div class="hidden lg:flex lg:gap-x-12">
+        <a href="home.html" class="text-sm font-semibold text-gray-300 hover:text-white">Home</a>
+        <a href="items.html" class="text-sm font-semibold text-gray-300 hover:text-white">Products</a>
+        <a href="#" class="text-sm font-semibold text-gray-300 hover:text-white">About Us</a>
+      </div>
+      <div class="hidden lg:flex lg:flex-1 lg:justify-end space-x-4">
+        <a href="profile.html" class="text-sm font-semibold text-indigo-400 hover:text-indigo-300">My Profile</a>
+        <a href="login.html" class="text-sm font-semibold text-gray-300 hover:text-white">Log out &rarr;</a>
+      </div>
+    </nav>
+  </header>
+  
+  <main class="pt-24 px-6 lg:px-8 flex-grow">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-3xl font-bold text-white text-center mb-8">My Profile</h1>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Left Column - Profile Info -->
+        <div class="profile-card p-6 md:col-span-1">
+          <div class="flex flex-col items-center">
+            <div class="w-32 h-32 rounded-full bg-indigo-900 flex items-center justify-center mb-4">
+              <span class="text-5xl">👤</span>
+            </div>
+            <h2 id="displayUsername" class="text-xl font-semibold mb-2">Username</h2>
+            <p class="text-gray-400 mb-4">Member since <span id="memberSince">March 2025</span></p>
+            <a href="#" class="btn-primary px-4 py-2 rounded text-white text-sm w-full text-center">View Order History</a>
+          </div>
+        </div>
+        
+        <!-- Right Column - Settings -->
+        <div class="profile-card p-6 md:col-span-2">
+          <h2 class="text-xl font-semibold mb-6 border-b border-gray-700 pb-2">Account Settings</h2>
+          
+          <form id="profileForm">
+            <div class="mb-4">
+              <label for="username" class="block text-sm font-medium mb-2">Username</label>
+              <input type="text" id="username" class="input-field w-full p-2 rounded" value="">
+            </div>
+            
+            <div class="mb-4">
+              <label for="email" class="block text-sm font-medium mb-2">Email Address</label>
+              <input type="email" id="email" class="input-field w-full p-2 rounded" value="">
+            </div>
+            
+            <div class="mb-4">
+              <label for="address" class="block text-sm font-medium mb-2">Shipping Address</label>
+              <textarea id="address" class="input-field w-full p-2 rounded" rows="3"></textarea>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div>
+                <label for="currentPassword" class="block text-sm font-medium mb-2">Current Password</label>
+                <input type="password" id="currentPassword" class="input-field w-full p-2 rounded">
+              </div>
+              <div>
+                <label for="newPassword" class="block text-sm font-medium mb-2">New Password</label>
+                <input type="password" id="newPassword" class="input-field w-full p-2 rounded">
+              </div>
+            </div>
+            
+            <div class="flex justify-end space-x-4">
+              <button type="button" class="btn-secondary px-4 py-2 rounded text-white">Cancel</button>
+              <button type="submit" class="btn-primary px-4 py-2 rounded text-white">Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <!-- Orders Section -->
+      <div class="profile-card p-6 mt-8">
+        <h2 class="text-xl font-semibold mb-6 border-b border-gray-700 pb-2">Recent Orders</h2>
+        
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="text-left">
+                <th class="pb-3 text-sm">Order ID</th>
+                <th class="pb-3 text-sm">Date</th>
+                <th class="pb-3 text-sm">Items</th>
+                <th class="pb-3 text-sm">Total</th>
+                <th class="pb-3 text-sm">Status</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-700">
+              <tr>
+                <td class="py-3 text-sm">#SM-2025-001</td>
+                <td class="py-3 text-sm">Mar 5, 2025</td>
+                <td class="py-3 text-sm">3</td>
+                <td class="py-3 text-sm">₱457.00</td>
+                <td class="py-3 text-sm"><span class="bg-green-800 text-green-200 text-xs px-2 py-1 rounded">Delivered</span></td>
+              </tr>
+              <tr>
+                <td class="py-3 text-sm">#SM-2025-002</td>
+                <td class="py-3 text-sm">Mar 1, 2025</td>
+                <td class="py-3 text-sm">1</td>
+                <td class="py-3 text-sm">₱135.00</td>
+                <td class="py-3 text-sm"><span class="bg-yellow-800 text-yellow-200 text-xs px-2 py-1 rounded">Shipped</span></td>
+              </tr>
+              <tr>
+                <td class="py-3 text-sm">#SM-2025-003</td>
+                <td class="py-3 text-sm">Feb 25, 2025</td>
+                <td class="py-3 text-sm">5</td>
+                <td class="py-3 text-sm">₱689.00</td>
+                <td class="py-3 text-sm"><span class="bg-green-800 text-green-200 text-xs px-2 py-1 rounded">Delivered</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="mt-4 text-center">
+          <a href="#" class="text-indigo-400 hover:text-indigo-300 text-sm">View All Orders</a>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <footer class="mt-auto py-6 text-center text-gray-400 text-sm">
+    <p>&copy; 2025 Sanrico Mercantile. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Load user data from localStorage
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get current logged in user (this would need to be implemented in your login system)
+      const username = localStorage.getItem('currentUser') || 'User';
+      
+      // Update displayed username
+      document.getElementById('displayUsername').textContent = username;
+      document.getElementById('username').value = username;
+      
+      // Set default email and other fields
+      document.getElementById('email').value = `${username.toLowerCase()}@example.com`;
+      
+      // Handle form submission
+      document.getElementById('profileForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form values
+        const updatedUsername = document.getElementById('username').value;
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        
+        // Simple validation
+        if (!updatedUsername) {
+          alert('Username cannot be empty');
+          return;
+        }
+        
+        // Handle password change if needed
+        if (currentPassword && newPassword) {
+          alert('Password updated successfully');
+        }
+        
+        // Update display username
+        document.getElementById('displayUsername').textContent = updatedUsername;
+        
+        // Show success message
+        alert('Profile updated successfully');
+      });
+    });
+  </script>
+</body>
+</html>
