@@ -1,0 +1,212 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Sanrico Mercantile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(
+                to bottom, 
+                rgba(60, 60, 70, 0.8) 10%,  
+                rgba(85, 85, 105, 0.7) 30%, 
+                rgba(40, 40, 50, 0.9) 90%  
+            );
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        .active {
+            background-color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+  <header class="absolute inset-x-0 top-0 z-50">
+    <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+      <div class="flex lg:flex-1">
+        <a href="#" class="-m-1.5 p-1.5">
+          <span class="sr-only">Sanrico Mercantile</span>
+          <img class="size-8" src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=gray-300" alt="Sanrico Mercantile">
+        </a>
+      </div>
+      <div class="hidden lg:flex lg:gap-x-12">
+        <a href="home.html" class="text-sm font-semibold text-gray-300 hover:text-white">Home</a>
+        <a href="items.html" class="text-sm font-semibold text-gray-300 hover:text-white">Products</a>
+        <a href="#" class="text-sm font-semibold text-gray-300 hover:text-white">About Us</a>
+      </div>
+      <div class="hidden lg:flex lg:flex-1 lg:justify-end space-x-4">
+        <button class="p-2 bg-blue-500 text-white rounded-full" onclick="window.location.href='cart.html'">🛒</button>
+        <a href="profile.html" class="text-sm font-semibold text-gray-300 hover:text-white">My Profile</a>
+        <a href="login.html" class="text-sm font-semibold text-gray-300 hover:text-white">Log in &rarr;</a>
+      </div>
+    </nav>
+  </header>
+  
+  <main class="pt-20 px-6 lg:px-8">
+    <h1 class="text-3xl font-bold text-white text-center mb-8">Your Shopping Cart</h1>
+    
+    <div class="container mx-auto">
+      <div id="cartEmpty" class="text-center py-12">
+        <p class="text-xl text-gray-300">Your cart is empty</p>
+        <button onclick="window.location.href='items.html'" class="mt-4 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-400">
+          Continue Shopping
+        </button>
+      </div>
+      
+      <div id="cartItems" class="hidden">
+        <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+          <table class="min-w-full">
+            <thead>
+              <tr class="bg-gray-700">
+                <th class="py-3 px-4 text-left">Product</th>
+                <th class="py-3 px-4 text-left">Price</th>
+                <th class="py-3 px-4 text-left">Quantity</th>
+                <th class="py-3 px-4 text-left">Total</th>
+                <th class="py-3 px-4 text-left">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="cartItemsList">
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="mt-6 flex flex-col md:flex-row justify-between items-start">
+          <div class="w-full md:w-1/2 mb-4 md:mb-0">
+            <textarea id="orderNotes" placeholder="Special instructions for your order..." class="w-full p-3 bg-gray-700 rounded text-white"></textarea>
+          </div>
+          
+          <div class="w-full md:w-1/3 bg-gray-800 p-4 rounded-lg">
+            <div class="flex justify-between mb-2">
+              <span>Subtotal:</span>
+              <span id="subtotal">₱0.00</span>
+            </div>
+            <div class="flex justify-between mb-2">
+              <span>Shipping:</span>
+              <span>₱50.00</span>
+            </div>
+            <hr class="my-2 border-gray-600">
+            <div class="flex justify-between font-bold">
+              <span>Total:</span>
+              <span id="total">₱50.00</span>
+            </div>
+            
+            <button id="checkoutBtn" class="w-full mt-4 py-2 bg-green-600 text-white rounded hover:bg-green-500">
+              Proceed to Checkout
+            </button>
+            <button onclick="window.location.href='items.html'" class="w-full mt-2 py-2 bg-blue-500 text-white rounded hover:bg-blue-400">
+              Continue Shopping
+            </button>
+            <button id="clearCartBtn" class="w-full mt-2 py-2 bg-red-600 text-white rounded hover:bg-red-500">
+              Clear Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    document.addEventListener('DOMContentLoaded', displayCart);
+    
+    document.getElementById('clearCartBtn').addEventListener('click', clearCart);
+    document.getElementById('checkoutBtn').addEventListener('click', checkout);
+    
+    function displayCart() {
+      const cartEmptyDiv = document.getElementById('cartEmpty');
+      const cartItemsDiv = document.getElementById('cartItems');
+      const cartItemsList = document.getElementById('cartItemsList');
+      
+      if (cart.length === 0) {
+        cartEmptyDiv.classList.remove('hidden');
+        cartItemsDiv.classList.add('hidden');
+        return;
+      }
+      
+      cartEmptyDiv.classList.add('hidden');
+      cartItemsDiv.classList.remove('hidden');
+      
+      cartItemsList.innerHTML = '';
+      
+      let subtotal = 0;
+      
+      cart.forEach((item, index) => {
+        const priceValue = parseFloat(item.price.replace('₱', ''));
+        const itemTotal = priceValue * item.quantity;
+        subtotal += itemTotal;
+        
+        const row = document.createElement('tr');
+        row.className = index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-750';
+        
+        row.innerHTML = `
+          <td class="py-3 px-4 flex items-center">
+            <img src="${item.img}" alt="${item.name}" class="w-16 h-16 object-cover rounded mr-3">
+            <div>
+              <p class="font-medium">${item.name}</p>
+            </div>
+          </td>
+          <td class="py-3 px-4">${item.price}</td>
+          <td class="py-3 px-4">
+            <div class="flex items-center">
+              <button onclick="updateQuantity(${index}, -1)" class="px-2 bg-gray-700 text-white rounded-l">-</button>
+              <input type="number" value="${item.quantity}" min="1" class="w-12 text-center bg-gray-600 text-white border-none" 
+                onchange="updateQuantityInput(${index}, this.value)">
+              <button onclick="updateQuantity(${index}, 1)" class="px-2 bg-gray-700 text-white rounded-r">+</button>
+            </div>
+          </td>
+          <td class="py-3 px-4">₱${itemTotal.toFixed(2)}</td>
+          <td class="py-3 px-4">
+            <button onclick="removeItem(${index})" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-500">
+              Remove
+            </button>
+          </td>
+        `;
+        
+        cartItemsList.appendChild(row);
+      });
+      
+      document.getElementById('subtotal').textContent = `₱${subtotal.toFixed(2)}`;
+      document.getElementById('total').textContent = `₱${(subtotal + 50).toFixed(2)}`;
+    }
+    
+    function updateQuantity(index, change) {
+      cart[index].quantity = Math.max(1, cart[index].quantity + change);
+      saveCart();
+      displayCart();
+    }
+    
+    function updateQuantityInput(index, value) {
+      cart[index].quantity = Math.max(1, parseInt(value) || 1);
+      saveCart();
+      displayCart();
+    }
+    
+    function removeItem(index) {
+      cart.splice(index, 1);
+      saveCart();
+      displayCart();
+    }
+    
+    function clearCart() {
+      if (confirm('Are you sure you want to clear your cart?')) {
+        cart = [];
+        saveCart();
+        displayCart();
+      }
+    }
+    
+    function saveCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+    
+    function checkout() {
+      alert('Proceeding to checkout. This functionality is not yet implemented.');
+    }
+  </script>
+</body>
+</html>
