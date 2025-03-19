@@ -3,20 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Sanrico Mercantile</title>
+    <title>Products - Sanrico Mercantile</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
             background: linear-gradient(
                 to bottom, 
-                rgba(60, 60, 70, 0.8) 10%,  /* Soft dark grey (top) */
-                rgba(85, 85, 105, 0.7) 30%, /* Muted purple (center) */
-                rgba(40, 40, 50, 0.9) 90%  /* Deep indigo/grey (bottom) */
+                rgba(60, 60, 70, 0.8) 10%,  
+                rgba(85, 85, 105, 0.7) 30%, 
+                rgba(40, 40, 50, 0.9) 90%  
             );
-            color: #e0e0e0; /* Light grey text*/
+            color: #e0e0e0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow-y: auto;
+        }
+        .zoom {
+            transition: transform .2s;
+        }
+        .zoom:hover {
+            transform: scale(1.1);
+        }
+        .active {
+            background-color: #4a5568;
+        }
+        #cartIcon {
+            display: block;
         }
     </style>
 </head>
@@ -34,22 +47,122 @@
         <a href="items.html" class="text-sm font-semibold text-gray-300 hover:text-white">Products</a>
         <a href="#" class="text-sm font-semibold text-gray-300 hover:text-white">About Us</a>
       </div>
-        <div class="hidden lg:flex lg:flex-1 lg:justify-end space-x-4">
-          <a href="profile.html" class="text-sm font-semibold text-gray-300 hover:text-white">My Profile</a>
-          <a href="login.html" class="text-sm font-semibold text-gray-300 hover:text-white">Log in &rarr;</a>
+      <div class="hidden lg:flex lg:flex-1 lg:justify-end space-x-4">
+        <button id="cartIcon" class="p-2 bg-blue-500 text-white rounded-full" onclick="window.location.href='cart.html'">🛒</button>
+        <a href="profile.html" class="text-sm font-semibold text-gray-300 hover:text-white">My Profile</a>
+        <a href="login.html" class="text-sm font-semibold text-gray-300 hover:text-white">Log in &rarr;</a>
       </div>
     </nav>
   </header>
-
-  <div class="relative isolate px-6 pt-14 lg:px-8">
-    <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56 text-center">
-      <h1 class="text-5x2 font-semibold tracking-tight text-white-100 sm:text-7xl">Welcome to Sanrico Mercantile</h1>
-      <p class="mt-8 text-lg font-medium text-white-400 sm:text-xl">Your one-stop shop for all your hardware needs!</p>
-      <div class="mt-10 flex items-center justify-center gap-x-6">
-        <a href="items.html" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">Shop Now</a>
-        <a href="login.html" class="text-sm font-semibold text-white-300 hover:text-white">Learn More &rarr;</a>
-      </div>
+  
+  <main class="pt-20 px-6 lg:px-8">
+    <div class="mb-6 flex justify-center">
+        <input type="text" id="searchBar" placeholder="Search products..." class="p-2 w-1/2 text-black rounded" oninput="filterProducts()">
     </div>
-  </div>
+    
+    <h1 class="text-3xl font-bold text-white text-center mb-8">Our Products</h1>
+    <div id="productContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    <div class="flex justify-center mt-6 space-x-2" id="pagination"></div>
+  </main>
+
+  <script>
+     const products = [
+        { img: "6inch-red-plumb-bob.jpeg", name: "6 inch Red Plumb Bob", desc: "69₱" },
+        { img: "BEARING UNIT UCP204 34.jpg", name: "Bearing Unit UCP204 34", desc: "70₱" },
+        { img: "BEARING UNIT UCP205 1.jpg", name: "Bearing Unit UCP205 1", desc: "72₱" },
+        { img: "BUFFING PASTE GREEN FOR STAINLESS.jpg", name: "Buffing Paste Green (For Stainless)", desc: "75₱" },
+        { img: "BUTTERFLY HINGE 1 2 2 3 4 rename nalang sa size.jpg", name: "Butterfly Hinge", desc: "79₱" },
+        { img: "CUP BRUSH 1.25MM PLAIN.jpg", name: "Cup Brush 1.25MM (Plain)", desc: "84₱" },
+        { img: "CUP HOOK 1 3 11 2 rename nalang te ha.jpg", name: "Cup Hook", desc: "90₱" },
+        { img: "GLASS LOCK.jpg", name: "Glass Lock", desc: "97₱" },
+        { img: "L-HOOK WITH RUBBER 1.jpg", name: "L-Hook With Rubber 1", desc: "105₱" },
+        { img: "PVC CABINET HANDLE 4.jpg", name: "PVC Cabinet Handle 4", desc: "114₱" },
+        { img: "STANLEY LOOSE PIN HINGE 3 ORIGINAL.png", name: "Stanley Loose Pin Hinge 3 Original", desc: "124₱" },
+        { img: "YALE PADLOCK 25MM.jpg", name: "Yale Padlock 25MM", desc: "135₱" },
+        { img: "YALE PADLOCK 30MM.jpg", name: "Yale Padlock 30MM", desc: "147₱" },
+        { img: "CIRCULAR LAMP 22W SLIM TYPE.png", name: "Circular Lamp 22W Slim Type", desc: "160₱" },
+        { img: "FUSE BOX 30A   SAFETY SWICTH.jpg", name: "Fuse Box 30A Safety Switch", desc: "174₱" },
+        { img: "GI COUPLING REDUCER.jpg", name: "GI Coupling Reducer", desc: "189₱" },
+        { img: "NEMA 3R  PLUG IN.jpg", name: "Nema 3R  Plug In", desc: "205₱" },
+        { img: "PDX WIRE.jpg", name: "PDX Wire", desc: "222₱" }
+    ];
+    
+    const itemsPerPage = 6;
+    let currentPage = 1;
+    let filteredProducts = [...products];
+
+    function displayProducts(page) {
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const displayedProducts = filteredProducts.slice(startIndex, endIndex);
+        
+        document.getElementById("productContainer").innerHTML = displayedProducts.map(product => `
+            <div class="product-item bg-gray-800 p-4 rounded-lg shadow-lg zoom">
+                <img src="${product.img}" alt="${product.name}" class="w-full h-48 object-cover rounded">
+                <h2 class="text-lg font-semibold text-white mt-4">${product.name}</h2>
+                <p class="text-gray-300">${product.desc}</p>
+                <div class="mt-4 flex space-x-2">
+                    <button class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">View Details</button>
+                    <button onclick="addToCart('${product.name}')" class="px-2 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-400">Add to Cart</button>
+                </div>
+            </div>
+        `).join("");
+        updatePagination();
+    }
+    
+    function addToCart(productName, goToCart = false) {
+    const product = products.find(p => p.name === productName);
+    if (!product) return;
+    
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    const existingProductIndex = cart.findIndex(item => item.name === productName);
+    
+    if (existingProductIndex >= 0) {
+        cart[existingProductIndex].quantity += 1;
+    } else {
+        cart.push({
+            name: product.name,
+            price: product.desc,
+            img: product.img,
+            quantity: 1
+        });
+    }
+    
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    document.getElementById("cartIcon").style.display = "block";
+    alert(`${productName} added to cart!`);
+    
+    if (goToCart) {
+        window.location.href = 'cart.html';
+    }
+}
+    function filterProducts() {
+        let input = document.getElementById("searchBar").value.toLowerCase();
+        filteredProducts = products.filter(product => product.name.toLowerCase().includes(input));
+        currentPage = 1;
+        displayProducts(currentPage);
+    }
+    
+    function updatePagination() {
+        const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+        const paginationContainer = document.getElementById("pagination");
+        paginationContainer.innerHTML = "";
+        
+        for (let i = 1; i <= totalPages; i++) {
+            const button = document.createElement("button");
+            button.textContent = i;
+            button.className = `px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 ${i === currentPage ? 'active' : ''}`;
+            button.onclick = () => {
+                currentPage = i;
+                displayProducts(currentPage);
+            };
+            paginationContainer.appendChild(button);
+        }
+    }
+    
+    displayProducts(currentPage);
+  </script>
 </body>
 </html>
