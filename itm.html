@@ -66,6 +66,27 @@
   </main>
 
   <script>
+  
+  window.onload = function() {
+    // Get the search query from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchQuery = urlParams.get('search');
+
+    // If there's a search query, set it in the search bar and filter products
+    if (searchQuery) {
+        document.getElementById("searchBar").value = searchQuery;
+        filterProducts();
+		}
+	};
+
+	function filterProducts() {
+    let input = document.getElementById("searchBar").value.toLowerCase();
+    filteredProducts = products.filter(product => product.name.toLowerCase().includes(input));
+    currentPage = 1;
+    displayProducts(currentPage);
+	}
+  
+  
      const products = [
         { img: "6inch-red-plumb-bob.jpeg", name: "6 inch Red Plumb Bob", desc: "69₱" },
         { img: "BEARING UNIT UCP204 34.jpg", name: "Bearing Unit UCP204 34", desc: "70₱" },
