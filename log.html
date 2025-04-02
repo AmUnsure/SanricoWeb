@@ -67,20 +67,27 @@
         }
     </style>
     <script>
-        function validateLogin(event) {
-            event.preventDefault();
-            let username = document.getElementById('username').value;
-            let password = document.getElementById('password').value;
-            
-            let users = localStorage.getItem('users') ? JSON.parse(localStorage.getItem('users')) : [];
-            let validUser = users.find(user => user.username === username && user.password === password);
-            
-            if (validUser) {
-                window.location.href = 'home.html';
-            } else {
-                document.getElementById('warning-message').style.display = 'block';
-            }
-        }
+        async function validateLogin(event) {
+    event.preventDefault();
+    let username = document.getElementById('username').value;
+    let password = document.getElementById('password').value;
+
+    let response = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+    });
+
+    let data = await response.json();
+
+    if (response.ok) {
+        alert("Login successful!");
+        window.location.href = 'hom.html';
+    } else {
+        document.getElementById('warning-message').textContent = data.message;
+        document.getElementById('warning-message').style.display = 'block';
+    }
+}
     </script>
 </head>
 <body>
@@ -94,7 +101,7 @@
             <button type="submit">LOGIN</button>
         </form>
         <div id="warning-message">User or password does not match an account in our system.</div>
-        <p>Don't have an account? <a href="register.html">Register here</a></p>
+        <p>Don't have an account? <a href="reg.html">Register here</a></p>
     </div>
 </body>
 </html>
