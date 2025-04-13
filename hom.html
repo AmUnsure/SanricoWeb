@@ -1,141 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Page setup -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Sanrico Mercantile</title>
+    <!-- Styling library -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Image zoom -->
     <style>
-        body {
-            background-color: #1a1a1a;
-            color: white;
-        }
-        .text-shadow {
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
-        }
-        .zoom {
-            transition: transform .2s;
-        }
-        .zoom:hover {
-            transform: scale(1.1);
-        }
-		#searchBarContainer {
-            display: none;
-        }
+        .zoom { transition: transform .2s; }
+        .zoom:hover { transform: scale(1.1); }
     </style>
-	<script>
-	 async function checkLoginStatus() {
-    try {
-        const response = await fetch('/auth/status', { credentials: 'include' });
-        const data = await response.json();
-        
-        // Debugging the response
-        console.log("Login Status Response:", data);
-
-        if (data.loggedIn) {
-            document.getElementById("profileIcon").style.display = "inline-block";
-            document.getElementById("signInButton").style.display = "none";
-        } else {
-            document.getElementById("profileIcon").style.display = "none";
-            document.getElementById("signInButton").style.display = "inline-block";
-        }
-    } catch (error) {
-        console.error("Error checking login status:", error);
-    }
-}
-	
-    function toggleSearchBar() {
-        const searchBar = document.getElementById("searchBarContainer");
-        if (searchBar.style.opacity === "0" || searchBar.style.opacity === "") {
-            searchBar.style.opacity = "1";
-            searchBar.style.transform = "scale(1)";
-            searchBar.style.display = "block";
-        } else {
-            searchBar.style.opacity = "0";
-            searchBar.style.transform = "scale(0.95)";
-            setTimeout(() => { searchBar.style.display = "none"; }, 300);
-        }
-    }
-
-    function searchItem(event) {
-        if (event.key === "Enter" || event.type === "click") {
-            const query = document.getElementById("searchBar").value;
-            if (query.trim() !== "") {
-                window.location.href = `itm.html?search=${encodeURIComponent(query)}`;
-            }
-        }
-    }
-	</script>
 </head>
-<body>
-	<div class="bg-gray-800 text-white text-sm py-1 flex justify-between px-6 items-center">
-        <marquee behavior="scroll" direction="left" class="w-full text-center">Get free delivery on orders over $100 | New tools in store | Exclusive discounts | Limited-time offers | Shop the latest arrivals</marquee>
+<body class="bg-gray-900 text-white">
+    <!-- Promo banner -->
+    <div class="bg-black-800 text-white text-sm py-1 flex justify-between px-6 items-center">
+        <marquee behavior="scroll" direction="left" class="w-full text-center">
+            Get free delivery on orders over $100 | New tools in store | Exclusive discounts | Limited-time offers | Shop the latest arrivals
+        </marquee>
     </div>
-    <header class="bg-gray-900 text-white py-2 px-6 h-17.5 flex justify-between items-center">
+    <!-- Top navigation -->
+    <header class="bg-gray-800 py-4 px-6 flex justify-between items-center">
         <div class="flex items-center space-x-4">
-            <img src="logo.png" alt="Logo" class="h-8"> 
+            <!-- Site logo -->
+            <img src="logo.png" alt="Logo" class="h-8">
+            <!-- Nav links -->
             <nav class="hidden md:flex space-x-6">
                 <a href="hom.html" class="hover:text-gray-400">Home</a>
                 <a href="itm.html" class="hover:text-gray-400">Products</a>
                 <a href="#" class="hover:text-gray-400">Help</a>
             </nav>
         </div>
-                <div class="flex items-center space-x-8">
+        <div class="flex items-center space-x-4">
+            <!-- Search button -->
+            <span id="searchToggle" class="cursor-pointer hover:text-gray-400">🔍</span>
+            <!-- User profile -->
+            <a href="profile.html" id="profileIcon" class="hover:text-gray-400 hidden">👤</a>
+            <!-- Login link -->
             <a href="log.html" id="signInButton" class="hover:text-gray-400">Sign in</a>
-            <span onclick="toggleSearchBar()" class="cursor-pointer hover:text-gray-400">🔍</span>
-            <a href="profile.html" id="profileIcon" class="hover:text-gray-400" style="display: none;">👤</a>
-            <a href="cart.html" class="relative hover:text-gray-400 flex items-center">
-                🛒
-                <span class="ml-1 bg-red-500 text-white text-xs px-2 rounded-full">0</span>
+            <!-- Logout link -->
+            <a href="log.html" id="logoutButton" class="hover:text-gray-400 hidden" onclick="logout()">Logout</a>
+            <!-- Shopping cart -->
+            <a href="cart.html" class="hover:text-gray-400">
+                🛒 <span id="cartCount" class="bg-red-500 text-xs px-2 rounded-full">0</span>
             </a>
         </div>
-		
-		<div id="searchBarContainer" class="absolute bottom-0 right-4 flex items-center z-50 bg-black p-2 rounded shadow-md">
-    <input type="text" id="searchBar" placeholder="Search products..."
-        class="p-2 w-64 text-black rounded border border-gray-300 bg-white">
-    <button onclick="searchItem(event)" class="ml-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500">
-        🔍
-    </button>
-</div>
     </header>
-    
-    <section class="relative h-screen flex items-center justify-start text-left bg-cover bg-center" style="background-image: url('homepagebg.png');">
+    <!-- Search input -->
+    <div id="searchBarContainer" class="hidden absolute top-16 right-4 bg-gray-800 p-2 rounded shadow-md transition-all">
+        <input type="text" id="searchBar" placeholder="Search products..." class="p-2 w-64 text-black rounded border border-gray-300">
+        <button onclick="searchItem()" class="ml-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500">🔍</button>
+    </div>
+    <!-- Main banner -->
+    <section class="h-screen flex items-center bg-cover bg-center" style="background-image: url('homepagebg.png');">
         <div class="ml-10 max-w-md">
+            <!-- Main heading -->
             <h1 class="text-5xl font-semibold text-shadow">Welcome to Sanrico Mercantile</h1>
-            <p class="mt-4 text-lg text-shadow">Your one-stop shop for all your hardware needs!</p>
+            <!-- Description -->
+            <p class="mt-4 text-lg">Your one-stop shop for all your hardware needs!</p>
+            <!-- Action buttons -->
             <div class="mt-6 space-x-4">
-                <a href="itm.html" class="bg-indigo-600 text-white px-6 py-2 rounded-md font-semibold hover:bg-indigo-500 text-shadow">Shop Now</a>
-                <a href="log.html" class="text-white underline hover:text-gray-400 text-shadow">Learn More &rarr;</a>
+                <a href="itm.html" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-500">Shop Now</a>
+                <a href="log.html" class="text-white underline hover:text-gray-400">Learn More →</a>
             </div>
         </div>
     </section>
-	
-	 <section class="py-10 text-center">
+    <!-- Product categories -->
+    <section class="py-10 text-center">
+        <!-- Category heading -->
         <h2 class="text-3xl font-bold mb-6">Shop by Category</h2>
-        <div class="flex justify-center">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                <div class="w-48 p-4 rounded-lg shadow-md text-center">
-                    <img src="top-view-screws-with-screwdriver.jpg" alt="New Arrivals" class="w-full h-40 object-cover rounded-md zoom">
-                    <p class="mt-2 text-white font-semibold">New Arrivals</p>
-                </div>
-                <div class="w-48 p-4 rounded-lg shadow-md text-center">
-                    <img src="view-steel-hammer-with-other-construction-elements-tools.jpg" alt="Construction" class="w-full h-40 object-cover rounded-md zoom">
-                    <p class="mt-2 text-white font-semibold">Construction</p>
-                </div>
-                <div class="w-48 p-4 rounded-lg shadow-md text-center">
-                    <img src="yellow-repair-kit-wooden-background.jpg" alt="Home Improvement" class="w-full h-40 object-cover rounded-md zoom">
-                    <p class="mt-2 text-white font-semibold">Home Improvement</p>
-                </div>
-                <div class="w-48 p-4 rounded-lg shadow-md text-center">
-                    <img src="close-up-drilling-machine.jpg" alt="Plumbing" class="w-full h-40 object-cover rounded-md zoom">
-                    <p class="mt-2 text-white font-semibold">Plumbing</p>
-                </div>
-                <div class="w-48 p-4 rounded-lg shadow-md text-center">
-                    <img src="top-view-wood-tools-desk.jpg" alt="More" class="w-full h-40 object-cover rounded-md zoom">
-                    <p class="mt-2 text-white font-semibold">More</p>
-                </div>
+        <!-- Category list -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-6 mx-auto max-w-6xl">
+            <!-- New arrivals -->
+            <div class="p-4 rounded-lg shadow-md">
+                <img src="top-view-screws-with-screwdriver.jpg" alt="New Arrivals" class="w-full h-40 object-cover rounded-md zoom">
+                <p class="mt-2 font-semibold">New Arrivals</p>
+            </div>
+            <!-- Construction -->
+            <div class="p-4 rounded-lg shadow-md">
+                <img src="view-steel-hammer-with-other-construction-elements-tools.jpg" alt="Construction" class="w-full h-40 object-cover rounded-md zoom">
+                <p class="mt-2 font-semibold">Construction</p>
+            </div>
+            <!-- Home improvement -->
+            <div class="p-4 rounded-lg shadow-md">
+                <img src="yellow-repair-kit-wooden-background.jpg" alt="Home Improvement" class="w-full h-40 object-cover rounded-md zoom">
+                <p class="mt-2 font-semibold">Home Improvement</p>
+            </div>
+            <!-- Plumbing -->
+            <div class="p-4 rounded-lg shadow-md">
+                <img src="close-up-drilling-machine.jpg" alt="Plumbing" class="w-full h-40 object-cover rounded-md zoom">
+                <p class="mt-2 font-semibold">Plumbing</p>
+            </div>
+            <!-- More -->
+            <div class="p-4 rounded-lg shadow-md">
+                <img src="top-view-wood-tools-desk.jpg" alt="More" class="w-full h-40 object-cover rounded-md zoom">
+                <p class="mt-2 font-semibold">More</p>
             </div>
         </div>
     </section>
+    <!-- Site scripts -->
+    <script>
+        //Login check
+        async function checkLoginStatus() {
+            const justLoggedIn = localStorage.getItem('justLoggedIn') === 'true';
+            if (justLoggedIn) {
+                document.getElementById('profileIcon').classList.remove('hidden');
+                document.getElementById('logoutButton').classList.remove('hidden');
+                document.getElementById('signInButton').classList.add('hidden');
+                localStorage.removeItem('justLoggedIn');
+            }
+            try {
+                const response = await fetch('/auth/status', { 
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                if (!response.ok) throw new Error(`Failed to check login status: ${response.status}`);
+                const data = await response.json();
+                if (data.loggedIn) {
+                    document.getElementById('profileIcon').classList.remove('hidden');
+                    document.getElementById('logoutButton').classList.remove('hidden');
+                    document.getElementById('signInButton').classList.add('hidden');
+                } else {
+                    document.getElementById('profileIcon').classList.add('hidden');
+                    document.getElementById('logoutButton').classList.add('hidden');
+                    document.getElementById('signInButton').classList.remove('hidden');
+                }
+            } catch (error) {
+            }
+        }
+
+        //Logout action
+        async function logout() {
+            try {
+                const response = await fetch('/logout', { method: 'POST', credentials: 'include' });
+                if (!response.ok) throw new Error(`Failed to logout: ${response.status}`);
+                window.location.href = 'log.html';
+            } catch (error) {
+            }
+        }
+
+        //Search toggle
+        function toggleSearchBar() {
+            const searchBar = document.getElementById('searchBarContainer');
+            searchBar.classList.toggle('hidden');
+        }
+
+        //Search action
+        function searchItem() {
+            const query = document.getElementById('searchBar').value.trim();
+            if (query) window.location.href = `itm.html?search=${encodeURIComponent(query)}`;
+        }
+
+        //Search event
+        document.getElementById('searchToggle').addEventListener('click', toggleSearchBar);
+        checkLoginStatus();
+    </script>
 </body>
 </html>
