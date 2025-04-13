@@ -1,107 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Page setup -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sanrico Mercantile</title>
-    <style>
-        body {
-            background-color: #d3d3d3;
-            font-family: Arial, sans-serif;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        #login-page {
-            width: 350px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            text-align: center;
-        }
-        h1 {
-            color: #555;
-        }
-        form label {
-            display: block;
-            margin: 10px 0;
-            font-weight: bold;
-            text-align: left;
-        }
-        form input {
-            width: 90%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #999;
-            border-radius: 4px;
-            background-color: #f0f0f0;
-        }
-        button {
-            background-color: #555;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #444;
-        }
-        #warning-message {
-            display: none;
-            color: red;
-            margin-top: 10px;
-        }
-        p a {
-            color: #555;
-            text-decoration: none;
-        }
-        p a:hover {
-            text-decoration: underline;
-        }
-    </style>
-    <script>
-        async function validateLogin(event) {
-    event.preventDefault();
-    let username = document.getElementById('username').value;
-    let password = document.getElementById('password').value;
-
-    let response = await fetch('http://localhost:5000/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-    });
-
-    let data = await response.json();
-
-    if (response.ok) {
-        alert("Login successful!");
-        window.location.href = 'hom.html';
-    } else {
-        document.getElementById('warning-message').textContent = data.message;
-        document.getElementById('warning-message').style.display = 'block';
-    }
-}
-    </script>
+    <!-- Styling library -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div id="login-page">
-        <h1>WELCOME TO SANRICO</h1>
-        <form onsubmit="validateLogin(event)">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <button type="submit">LOGIN</button>
+<body class="bg-gray-200 flex items-center justify-center min-h-screen">
+    <!-- Login container -->
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
+        <!-- Page title -->
+        <h1 class="text-2xl font-semibold text-gray-700 text-center mb-6">Welcome to Sanrico</h1>
+        <!-- Login form -->
+        <form id="loginForm" class="space-y-4">
+            <!-- Username field -->
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700">Username:</label>
+                <input type="text" id="username" name="username" required class="w-full p-2 border border-gray-300 rounded bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500">
+            </div>
+            <!-- Password field -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Password:</label>
+                <input type="password" id="password" name="password" required class="w-full p-2 border border-gray-300 rounded bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500">
+            </div>
+            <!-- Submit button -->
+            <button type="submit" class="w-full bg-gray-600 text-white p-2 rounded hover:bg-gray-700 transition">Login</button>
         </form>
-        <div id="warning-message">User or password does not match an account in our system.</div>
-        <p>Don't have an account? <a href="reg.html">Register here</a></p>
+        <!-- Error message -->
+        <p id="error-message" class="text-red-500 text-sm mt-2 hidden"></p>
+        <!-- Register link -->
+        <p class="mt-4 text-center text-sm text-gray-600">
+            Don't have an account? <a href="reg.html" class="text-gray-700 hover:underline">Register here</a>
+        </p>
     </div>
+    <!-- Form handling -->
+    <script>
+        //Form submission
+        document.getElementById('loginForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+
+            //Input validation
+            if (username.length < 3 || password.length < 6) {
+                errorMessage.textContent = 'Username must be 3+ characters and password 6+ characters.';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            //Server request
+            try {
+                const response = await fetch('http://localhost:5000/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password }),
+                    credentials: 'include'
+                });
+                const data = await response.json();
+
+                //Success handling
+                if (response.ok) {
+                    alert('Login successful!');
+                    window.location.href = 'hom.html';
+                } else {
+                    //Error handling
+                    errorMessage.textContent = data.message || 'Login failed.';
+                    errorMessage.classList.remove('hidden');
+                }
+            } catch (error) {
+                //Server error
+                errorMessage.textContent = 'Error connecting to server. Check if the server is running.';
+                errorMessage.classList.remove('hidden');
+            }
+        });
+    </script>
 </body>
 </html>
