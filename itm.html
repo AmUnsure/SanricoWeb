@@ -65,13 +65,13 @@
     </main>
     <!-- Site scripts -->
     <script>
-        <!-- Page settings -->
+        //Page settings
         const itemsPerPage = 6;
         let currentPage = 1;
         let products = [];
         let filteredProducts = [];
 
-        <!-- Load products -->
+        //Load products
         async function fetchProducts() {
             try {
                 const response = await fetch('/products');
@@ -84,7 +84,7 @@
             }
         }
 
-        <!-- Login check -->
+        //Login check
         async function checkLoginStatus() {
             try {
                 const response = await fetch('/auth/status', { credentials: 'include' });
@@ -103,7 +103,7 @@
             }
         }
 
-        <!-- Logout action -->
+        //Logout action
         async function logout() {
             try {
                 const response = await fetch('/logout', { method: 'POST', credentials: 'include' });
@@ -113,7 +113,7 @@
             }
         }
 
-        <!-- Filter products -->
+        //Filter products
         function filterProducts() {
             const search = document.getElementById('searchBar').value.toLowerCase();
             const category = document.getElementById('categoryFilter').value;
@@ -125,7 +125,7 @@
             displayProducts(currentPage);
         }
 
-        <!-- Show products -->
+        //Show products
         function displayProducts(page) {
             const start = (page - 1) * itemsPerPage;
             const end = start + itemsPerPage;
@@ -144,7 +144,7 @@
             updatePagination();
         }
 
-        <!-- Add to cart -->
+        //Add to cart
         function addToCart(productName) {
             const product = products.find(p => p.name === productName);
             if (!product) return;
@@ -157,7 +157,7 @@
             alert(`${productName} added to cart!`);
         }
 
-        <!-- Update pagination -->
+        //Update pagination
         function updatePagination() {
             const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
             const pagination = document.getElementById('pagination');
@@ -171,7 +171,7 @@
             }
         }
 
-        <!-- Initialize -->
+        //Initialize
         fetchProducts();
         checkLoginStatus();
     </script>
