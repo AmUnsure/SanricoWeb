@@ -1,189 +1,179 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Page setup -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products - Sanrico Mercantile</title>
+    <!-- Styling library -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Image zoom -->
     <style>
-        body {
-            background: linear-gradient(
-                to bottom, 
-                rgba(60, 60, 70, 0.8) 10%,  
-                rgba(85, 85, 105, 0.7) 30%, 
-                rgba(40, 40, 50, 0.9) 90%  
-            );
-            color: #e0e0e0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
         .zoom {
             transition: transform .2s;
         }
         .zoom:hover {
             transform: scale(1.1);
         }
-        .active {
-            background-color: #4a5568;
-        }
-        #cartIcon {
-            display: block;
-        }
     </style>
 </head>
-<body>
-  <header class="absolute inset-x-0 top-0 z-50">
-    <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
-      <div class="flex lg:flex-1">
-        <a href="#" class="-m-1.5 p-1.5">
-          <span class="sr-only">Sanrico Mercantile</span>
-          <img class="size-8" src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=gray-300" alt="Sanrico Mercantile">
-        </a>
-      </div>
-      <div class="hidden lg:flex lg:gap-x-12">
-        <a href="home.html" class="text-sm font-semibold text-gray-300 hover:text-white">Home</a>
-        <a href="items.html" class="text-sm font-semibold text-gray-300 hover:text-white">Products</a>
-        <a href="#" class="text-sm font-semibold text-gray-300 hover:text-white">About Us</a>
-      </div>
-      <div class="hidden lg:flex lg:flex-1 lg:justify-end space-x-4">
-        <button id="cartIcon" class="p-2 bg-blue-500 text-white rounded-full" onclick="window.location.href='cart.html'">🛒</button>
-        <a href="profile.html" class="text-sm font-semibold text-gray-300 hover:text-white">My Profile</a>
-        <a href="login.html" class="text-sm font-semibold text-gray-300 hover:text-white">Log in &rarr;</a>
-      </div>
-    </nav>
-  </header>
-  
-  <main class="pt-20 px-6 lg:px-8">
-    <div class="mb-6 flex justify-center">
-        <input type="text" id="searchBar" placeholder="Search products..." class="p-2 w-1/2 text-black rounded" oninput="filterProducts()">
-    </div>
-    
-    <h1 class="text-3xl font-bold text-white text-center mb-8">Our Products</h1>
-    <div id="productContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-    <div class="flex justify-center mt-6 space-x-2" id="pagination"></div>
-  </main>
+<body class="bg-gradient-to-b from-gray-600 to-gray-900 text-white min-h-screen">
+    <!-- Top navigation -->
+    <header class="bg-gray-800 py-4 px-6 flex justify-between items-center">
+        <div class="flex items-center space-x-4">
+            <!-- Site logo -->
+            <img src="logo.png" alt="Logo" class="h-8">
+            <!-- Nav links -->
+            <nav class="hidden md:flex space-x-6">
+                <a href="hom.html" class="hover:text-gray-400">Home</a>
+                <a href="itm.html" class="hover:text-gray-400">Products</a>
+                <a href="#" class="hover:text-gray-400">About Us</a>
+            </nav>
+        </div>
+        <div class="flex items-center space-x-4">
+            <!-- User profile -->
+            <a href="profile.html" id="profileIcon" class="hover:text-gray-400 hidden">👤</a>
+            <!-- Login link -->
+            <a href="log.html" id="signInButton" class="hover:text-gray-400">Sign in</a>
+            <!-- Logout link -->
+            <a href="#" id="logoutButton" class="hover:text-gray-400 hidden" onclick="logout()">Logout</a>
+            <!-- Shopping cart -->
+            <a href="cart.html" class="hover:text-gray-400">
+                🛒 <span id="cartCount" class="bg-red-500 text-xs px-2 rounded-full">0</span>
+            </a>
+        </div>
+    </header>
+    <!-- Main content -->
+    <main class="pt-20 px-6">
+        <!-- Search and filter -->
+        <div class="mb-6 flex justify-center space-x-4">
+            <input type="text" id="searchBar" placeholder="Search products..." class="p-2 w-1/2 text-black rounded border border-gray-300" oninput="filterProducts()">
+            <select id="categoryFilter" class="p-2 rounded text-black" onchange="filterProducts()">
+                <option value="">All Categories</option>
+                <option value="New Arrivals">New Arrivals</option>
+                <option value="Construction">Construction</option>
+                <option value="Home Improvement">Home Improvement</option>
+                <option value="Plumbing">Plumbing</option>
+            </select>
+        </div>
+        <!-- Page title -->
+        <h1 class="text-3xl font-bold text-center mb-8">Our Products</h1>
+        <!-- Product grid -->
+        <div id="productContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        <!-- Pagination -->
+        <div class="flex justify-center mt-6 space-x-2" id="pagination"></div>
+    </main>
+    <!-- Site scripts -->
+    <script>
+        <!-- Page settings -->
+        const itemsPerPage = 6;
+        let currentPage = 1;
+        let products = [];
+        let filteredProducts = [];
 
-  <script>
-  
-  window.onload = function() {
-    // Get the search query from the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchQuery = urlParams.get('search');
-
-    // If there's a search query, set it in the search bar and filter products
-    if (searchQuery) {
-        document.getElementById("searchBar").value = searchQuery;
-        filterProducts();
-		}
-	};
-
-	function filterProducts() {
-    let input = document.getElementById("searchBar").value.toLowerCase();
-    filteredProducts = products.filter(product => product.name.toLowerCase().includes(input));
-    currentPage = 1;
-    displayProducts(currentPage);
-	}
-  
-  
-     const products = [
-        { img: "6inch-red-plumb-bob.jpeg", name: "6 inch Red Plumb Bob", desc: "69₱" },
-        { img: "BEARING UNIT UCP204 34.jpg", name: "Bearing Unit UCP204 34", desc: "70₱" },
-        { img: "BEARING UNIT UCP205 1.jpg", name: "Bearing Unit UCP205 1", desc: "72₱" },
-        { img: "BUFFING PASTE GREEN FOR STAINLESS.jpg", name: "Buffing Paste Green (For Stainless)", desc: "75₱" },
-        { img: "BUTTERFLY HINGE 1 2 2 3 4 rename nalang sa size.jpg", name: "Butterfly Hinge", desc: "79₱" },
-        { img: "CUP BRUSH 1.25MM PLAIN.jpg", name: "Cup Brush 1.25MM (Plain)", desc: "84₱" },
-        { img: "CUP HOOK 1 3 11 2 rename nalang te ha.jpg", name: "Cup Hook", desc: "90₱" },
-        { img: "GLASS LOCK.jpg", name: "Glass Lock", desc: "97₱" },
-        { img: "L-HOOK WITH RUBBER 1.jpg", name: "L-Hook With Rubber 1", desc: "105₱" },
-        { img: "PVC CABINET HANDLE 4.jpg", name: "PVC Cabinet Handle 4", desc: "114₱" },
-        { img: "STANLEY LOOSE PIN HINGE 3 ORIGINAL.png", name: "Stanley Loose Pin Hinge 3 Original", desc: "124₱" },
-        { img: "YALE PADLOCK 25MM.jpg", name: "Yale Padlock 25MM", desc: "135₱" },
-        { img: "YALE PADLOCK 30MM.jpg", name: "Yale Padlock 30MM", desc: "147₱" },
-        { img: "CIRCULAR LAMP 22W SLIM TYPE.png", name: "Circular Lamp 22W Slim Type", desc: "160₱" },
-        { img: "FUSE BOX 30A   SAFETY SWICTH.jpg", name: "Fuse Box 30A Safety Switch", desc: "174₱" },
-        { img: "GI COUPLING REDUCER.jpg", name: "GI Coupling Reducer", desc: "189₱" },
-        { img: "NEMA 3R  PLUG IN.jpg", name: "Nema 3R  Plug In", desc: "205₱" },
-        { img: "PDX WIRE.jpg", name: "PDX Wire", desc: "222₱" }
-    ];
-    
-    const itemsPerPage = 6;
-    let currentPage = 1;
-    let filteredProducts = [...products];
-
-    function displayProducts(page) {
-        const startIndex = (page - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const displayedProducts = filteredProducts.slice(startIndex, endIndex);
-        
-        document.getElementById("productContainer").innerHTML = displayedProducts.map(product => `
-            <div class="product-item bg-gray-800 p-4 rounded-lg shadow-lg zoom">
-                <img src="images/${product.img}" alt="${product.name}" class="w-full h-48 object-cover rounded">
-                <h2 class="text-lg font-semibold text-white mt-4">${product.name}</h2>
-                <p class="text-gray-300">${product.desc}</p>
-                <div class="mt-4 flex space-x-2">
-                    <button class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">View Details</button>
-                    <button onclick="addToCart('${product.name}')" class="px-2 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-400">Add to Cart</button>
-                </div>
-            </div>
-        `).join("");
-        updatePagination();
-    }
-    
-    function addToCart(productName, goToCart = false) {
-    const product = products.find(p => p.name === productName);
-    if (!product) return;
-    
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    
-    const existingProductIndex = cart.findIndex(item => item.name === productName);
-    
-    if (existingProductIndex >= 0) {
-        cart[existingProductIndex].quantity += 1;
-    } else {
-        cart.push({
-            name: product.name,
-            price: product.desc,
-            img: product.img,
-            quantity: 1
-        });
-    }
-    
-    localStorage.setItem('cart', JSON.stringify(cart));
-    
-    document.getElementById("cartIcon").style.display = "block";
-    alert(`${productName} added to cart!`);
-    
-    if (goToCart) {
-        window.location.href = 'cart.html';
-    }
-}
-    function filterProducts() {
-        let input = document.getElementById("searchBar").value.toLowerCase();
-        filteredProducts = products.filter(product => product.name.toLowerCase().includes(input));
-        currentPage = 1;
-        displayProducts(currentPage);
-    }
-    
-    function updatePagination() {
-        const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-        const paginationContainer = document.getElementById("pagination");
-        paginationContainer.innerHTML = "";
-        
-        for (let i = 1; i <= totalPages; i++) {
-            const button = document.createElement("button");
-            button.textContent = i;
-            button.className = `px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 ${i === currentPage ? 'active' : ''}`;
-            button.onclick = () => {
-                currentPage = i;
+        <!-- Load products -->
+        async function fetchProducts() {
+            try {
+                const response = await fetch('/products');
+                if (!response.ok) throw new Error('Failed to fetch products');
+                products = await response.json();
+                filteredProducts = [...products];
                 displayProducts(currentPage);
-            };
-            paginationContainer.appendChild(button);
+            } catch (error) {
+                document.getElementById('productContainer').innerHTML = '<p class="text-red-500 text-center">Error loading products. Please try again later.</p>';
+            }
         }
-    }
-    
-    displayProducts(currentPage);
-  </script>
+
+        <!-- Login check -->
+        async function checkLoginStatus() {
+            try {
+                const response = await fetch('/auth/status', { credentials: 'include' });
+                if (!response.ok) throw new Error(`Failed to check login status: ${response.status}`);
+                const data = await response.json();
+                if (data.loggedIn) {
+                    document.getElementById('profileIcon').classList.remove('hidden');
+                    document.getElementById('logoutButton').classList.remove('hidden');
+                    document.getElementById('signInButton').classList.add('hidden');
+                } else {
+                    document.getElementById('profileIcon').classList.add('hidden');
+                    document.getElementById('logoutButton').classList.add('hidden');
+                    document.getElementById('signInButton').classList.remove('hidden');
+                }
+            } catch (error) {
+            }
+        }
+
+        <!-- Logout action -->
+        async function logout() {
+            try {
+                const response = await fetch('/logout', { method: 'POST', credentials: 'include' });
+                if (!response.ok) throw new Error(`Failed to logout: ${response.status}`);
+                window.location.href = 'log.html';
+            } catch (error) {
+            }
+        }
+
+        <!-- Filter products -->
+        function filterProducts() {
+            const search = document.getElementById('searchBar').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            filteredProducts = products.filter(p => 
+                p.name.toLowerCase().includes(search) && 
+                (!category || p.category === category)
+            );
+            currentPage = 1;
+            displayProducts(currentPage);
+        }
+
+        <!-- Show products -->
+        function displayProducts(page) {
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const displayed = filteredProducts.slice(start, end);
+            document.getElementById('productContainer').innerHTML = displayed.map(p => `
+                <div class="bg-gray-800 p-4 rounded-lg shadow-lg zoom">
+                    <img src="images/${p.img}" alt="${p.name}" class="w-full h-48 object-cover rounded">
+                    <h2 class="text-lg font-semibold mt-4">${p.name}</h2>
+                    <p class="text-gray-300">${p.price}</p>
+                    <div class="mt-4 flex space-x-2">
+                        <button class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">View Details</button>
+                        <button onclick="addToCart('${p.name}')" class="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-400">Add to Cart</button>
+                    </div>
+                </div>
+            `).join('');
+            updatePagination();
+        }
+
+        <!-- Add to cart -->
+        function addToCart(productName) {
+            const product = products.find(p => p.name === productName);
+            if (!product) return;
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existing = cart.findIndex(item => item.name === productName);
+            if (existing >= 0) cart[existing].quantity += 1;
+            else cart.push({ name: product.name, price: product.price, img: product.img, quantity: 1 });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            document.getElementById('cartCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            alert(`${productName} added to cart!`);
+        }
+
+        <!-- Update pagination -->
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.className = `px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 ${i === currentPage ? 'bg-gray-600' : ''}`;
+                button.onclick = () => { currentPage = i; displayProducts(currentPage); };
+                pagination.appendChild(button);
+            }
+        }
+
+        <!-- Initialize -->
+        fetchProducts();
+        checkLoginStatus();
+    </script>
 </body>
 </html>
