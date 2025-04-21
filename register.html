@@ -32,7 +32,7 @@
         <p id="error-message" class="text-red-500 text-sm mt-2 hidden"></p>
         <!-- Login link -->
         <p class="mt-4 text-center text-sm text-gray-600">
-            Already have an account? <a href="log.html" class="text-gray-700 hover:underline">Login here</a>
+            Already have an account? <a href="login.html" class="text-gray-700 hover:underline">Login here</a>
         </p>
     </div>
     <!-- Form handling -->
@@ -63,7 +63,7 @@
                 //Success handling
                 if (response.ok) {
                     alert('Registration successful! You can now log in.');
-                    window.location.href = 'log.html';
+                    window.location.href = 'login.html';
                 } else {
                     // Error handling
                     errorMessage.textContent = data.message || 'Registration failed.';
