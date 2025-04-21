@@ -32,7 +32,7 @@
         <p id="error-message" class="text-red-500 text-sm mt-2 hidden"></p>
         <!-- Register link -->
         <p class="mt-4 text-center text-sm text-gray-600">
-            Don't have an account? <a href="reg.html" class="text-gray-700 hover:underline">Register here</a>
+            Don't have an account? <a href="register.html" class="text-gray-700 hover:underline">Register here</a>
         </p>
     </div>
     <!-- Form handling -->
@@ -64,7 +64,7 @@
                 //Success handling
                 if (response.ok) {
                     alert('Login successful!');
-                    window.location.href = 'hom.html';
+                    window.location.href = 'home.html';
                 } else {
                     //Error handling
                     errorMessage.textContent = data.message || 'Login failed.';
