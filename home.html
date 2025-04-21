@@ -27,8 +27,8 @@
             <img src="logo.png" alt="Logo" class="h-8">
             <!-- Nav links -->
             <nav class="hidden md:flex space-x-6">
-                <a href="hom.html" class="hover:text-gray-400">Home</a>
-                <a href="itm.html" class="hover:text-gray-400">Products</a>
+                <a href="home.html" class="hover:text-gray-400">Home</a>
+                <a href="items.html" class="hover:text-gray-400">Products</a>
                 <a href="#" class="hover:text-gray-400">Help</a>
             </nav>
         </div>
@@ -38,9 +38,9 @@
             <!-- User profile -->
             <a href="profile.html" id="profileIcon" class="hover:text-gray-400 hidden">👤</a>
             <!-- Login link -->
-            <a href="log.html" id="signInButton" class="hover:text-gray-400">Sign in</a>
+            <a href="login.html" id="signInButton" class="hover:text-gray-400">Sign in</a>
             <!-- Logout link -->
-            <a href="log.html" id="logoutButton" class="hover:text-gray-400 hidden" onclick="logout()">Logout</a>
+            <a href="login.html" id="logoutButton" class="hover:text-gray-400 hidden" onclick="logout()">Logout</a>
             <!-- Shopping cart -->
             <a href="cart.html" class="hover:text-gray-400">
                 🛒 <span id="cartCount" class="bg-red-500 text-xs px-2 rounded-full">0</span>
@@ -61,8 +61,8 @@
             <p class="mt-4 text-lg">Your one-stop shop for all your hardware needs!</p>
             <!-- Action buttons -->
             <div class="mt-6 space-x-4">
-                <a href="itm.html" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-500">Shop Now</a>
-                <a href="log.html" class="text-white underline hover:text-gray-400">Learn More →</a>
+                <a href="items.html" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-500">Shop Now</a>
+                <a href="login.html" class="text-white underline hover:text-gray-400">Learn More →</a>
             </div>
         </div>
     </section>
@@ -137,7 +137,7 @@
             try {
                 const response = await fetch('/logout', { method: 'POST', credentials: 'include' });
                 if (!response.ok) throw new Error(`Failed to logout: ${response.status}`);
-                window.location.href = 'log.html';
+                window.location.href = 'login.html';
             } catch (error) {
             }
         }
@@ -151,7 +151,7 @@
         //Search action
         function searchItem() {
             const query = document.getElementById('searchBar').value.trim();
-            if (query) window.location.href = `itm.html?search=${encodeURIComponent(query)}`;
+            if (query) window.location.href = `item.html?search=${encodeURIComponent(query)}`;
         }
 
         //Search event
